@@ -67,5 +67,9 @@ def evaluate_model():
       references = predictions.label_ids
       )
 
-
+def compute_metrics(eval_preds):
+    metric = load_metric("glue", "mrpc")
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
  
