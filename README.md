@@ -1,2 +1,2 @@
 # transformers-nlp
-Primarily based on NLP problems to solved using Transformers and BERT variants from huggingface
+Primarily based on NLP problems to be solved using Transformers and BERT variants
