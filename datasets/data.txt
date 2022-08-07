@@ -1,0 +1,7 @@
+
+  clinical expression is present in this document
+
+  clinical expression is not present with this patient
+
+  clinical impression is present vibrantly
+  
