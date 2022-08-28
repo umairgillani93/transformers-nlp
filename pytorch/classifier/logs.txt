@@ -1,0 +1,64 @@
+Torch version: 1.9.0+cpu
+
+Transformers version: 4.16.2
+
+Device: cpu
+   Unnamed: 0                           text  labels
+0           0      clinical impression found       1
+1           1  clinical impression not found       0
+2           2      clinical impression found       1
+3           3  clinical impression not found       0
+4           4      clinical impression found       1
+(10, 3)
+
+Validation set defined
+
+>> Loading model
+>> Model Loaded from path: /home/tahirshah/bert_pretrained_weights/
+
+Loading tokenizer...
+
+Encoded text: {'input_ids': [[101, 2023, 2003, 2034, 6251, 102, 0], [101, 2023, 2003, 1037, 2117, 6251, 102], [101, 3712, 2003, 2630, 102, 0, 0], [101, 2543, 2003, 2980, 102, 0, 0]], 'token_type_ids': [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]], 'attention_mask': [[1, 1, 1, 1, 1, 1, 0], [1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 0, 0], [1, 1, 1, 1, 1, 0, 0]]}
+
+Type encoded text: <class 'transformers.tokenization_utils_base.BatchEncoding'>
+Encoded text keys: dict_keys(['input_ids', 'token_type_ids', 'attention_mask'])
+
+Type trian text: <class 'pandas.core.series.Series'>
+
+Train seq: tensor([[  101,  6612, 17727,   102],
+        [  101,  6612,  8605,   102],
+        [  101,  6612,  8605,   102],
+        [  101,  6612,  8605,   102],
+        [  101,  6612,  8605,   102],
+        [  101,  6612,  8605,   102],
+        [  101,  6612,  8605,   102]])
+
+Train mask: tensor([[1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]])
+
+Trian y: tensor([1, 0, 1, 0, 0, 1, 1])
+
+Test seq: tensor([[ 101, 6612, 8605,  102],
+        [ 101, 6612, 8605,  102]])
+
+Test mask: tensor([[1, 1, 1, 1],
+        [1, 1, 1, 1]])
+
+Test y: tensor([0, 1])
+
+Valid seq: tensor([[ 101, 6612, 8605,  102]])
+
+Valid mask: tensor([[1, 1, 1, 1]])
+
+Valid y: tensor([0])
+
+>>> Done smapling Training and Validation datasets
+
+>> Custom Model initialized
+
+class weights: [1.16666667 0.875     ]

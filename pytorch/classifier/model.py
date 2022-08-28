@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
+
 print('Torch version: {}'.format(torch.__version__))
 print('\nTransformers version: {}'.format(transformers.__version__))
 
@@ -73,6 +74,7 @@ encoded_text = tokenizer.batch_encode_plus(sample_text,
 
 print('\nEncoded text: {}'.format(encoded_text))
 print('\nType encoded text: {}'.format(type(encoded_text)))
+print(f'Encoded text keys: {encoded_text.keys()}')
 
 # Plot the lengths of sequences in training dataset
 sequence_len = [len(x.split()) for x in train_text]
@@ -179,7 +181,10 @@ for p in bert.parameters():
   p.requires_grad = False
 
 class CustomHead(nn.Module):
-
+  '''
+  mapped style dataset: Implement __getitem__ and __len__ protocols and returns index-wise mappings from dataset
+  iterable style dataset: Implement __iter__ protocols and returns streams of data from remote servers / data sources and even logs
+  '''
   def __init__(self, bert):
     # Define constructor function
     # Constructor function takes model as an input
