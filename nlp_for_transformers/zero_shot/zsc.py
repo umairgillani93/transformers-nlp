@@ -36,6 +36,14 @@ df = pd.read_csv('../text_summarizer/bbc_text_cls.csv')
 
 print('\n', df.head())
 
+# create a set of labels
+labels = list(set(df['labels']))
+
+print(textwrap.fill(df.iloc[1024]['text']))
+
+preds = classifier(df['text'].tolist()[:10], candiate_labels=df['labels'][:10])
+
+print('\nFinal predictions: {}'.format(preds))
 
 
 
