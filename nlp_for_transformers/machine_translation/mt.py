@@ -12,11 +12,13 @@ from nltk.tokenize import RegexpTokenizer
 warnings.filterwarnings('ignore')
 
 print('\nImports successful')
+path = os.getenv('HOME') + '/models/translation_pretrained_weights/'
 
 eng2spa = {}
 pp = pprint.PrettyPrinter(indent=4)
 
-for line in open('spa-eng/spa.txt'):
+file_path = os.getenv('HOME') + '/spa-eng/spa.txt'
+for line in open(file_path):
   line = line.rstrip()
   eng, spa = line.split('\t')
 
@@ -62,12 +64,15 @@ pp.pprint('\neng-2-spanish tokens: {}'.format(eng2spa_tokens))
 # Sentencepiece is required by the translation models
 # which needs to be "pip install sentencepiece"
 
-print('\n >> Downloading model...')
+print('\n >> Loading model...')
 translator = pipeline("translation",
-                      model="Helsinki-NLP/opus-mt-en-es")
+    #model="Helsinki-NLP/opus-mt-en-es", path)
+    path)
 
-path = os.getenv('HOME') + '/models/translation_pretrained_weights/'
 
-print(' >> Saving model to the path: {}'.format(path))
-translator.save_pretrained(path)
-print('\nModel saved')
+#print(' >> Saving model to the path: {}'.format(path))
+#translator.save_pretrained(path)
+print('\nModel loaded')
+
+pp.pprint('\nTranslation exmaple: {}'.format(list(eng2spa.keys())[20000:20010]))
+pp.pprint('\nTranslation exmaple: {}'.format(translator(list(eng2spa.keys())[20000:20010])))
