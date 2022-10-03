@@ -1,7 +1,11 @@
 import os
 import pprint
+import torch
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
+
+device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
+print('\nDevice: {}'.format(device))
 
 def save_model(path, model, chkpt):
   '''
