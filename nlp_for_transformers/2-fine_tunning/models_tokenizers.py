@@ -43,6 +43,7 @@ print('\nTokenizer: {}'.format(tokenizer))
 # and the other one is [CSL] at the end of sentence
 pp.pprint(tokenizer("hello world"))
 
+
 print('\nText tokens: {}'.format(tokenizer.tokenize("hello world")))
 
 # converts the text tokens to int ids
