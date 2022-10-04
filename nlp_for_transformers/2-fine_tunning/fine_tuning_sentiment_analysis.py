@@ -24,6 +24,16 @@ raw_dataset = load_dataset('glue', 'sst2')
 
 print('\nRaw dataset: {}'.format(raw_dataset))
 
+def save_model(path, model, chkpt):
+  '''
+  downloads and saves the model from Huggingface.co
+  '''
+  print('\n >> Downloading model ..')
+  model_ = model.from_pretrained(chkpt)
+  print('\n >> Saving model to path: {}'.format(path))
+  model_.save_pretrained(path)
+  print('\nMOdel saved!')
+
 
 
 # prettry printer for python
@@ -31,10 +41,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # define checkpoint
 # remember! this should be same for both 'Tokenizer' and 'Model'
-checkpoint = 'bert-base-uncased'
+checkpoint = 'distilbert-base-uncased'
 # path to save the tokenizer
 tokenizer_path = os.getenv('HOME') + '/tokenizers/AutoTokenizer/'
-model_path = os.getenv('HOME') + '/models/AutoModelForSequenceClassification_pretrained/'
+model_path = os.getenv('HOME') + '/models/AutoModelForSequenceClassification_distilbert_pretrained/'
+
+# download and save the model
+save_model(model_path, AutoModelForSequenceClassification, checkpoint)
 
 # load the tokenizer and model
 print('\n >> Loading model..')
@@ -71,17 +84,21 @@ metric = load_metric('glue', 'sst2')
 print('\nscore: {}'.format(metric.compute(predictions=[1,0,1], references=[1,0,0])))
 
 trainer = Trainer(
-    mdoel,
+    model,
     training_args,
     train_dataset=tokenized_dataset['train'],
     eval_dataset=tokenized_dataset['validation'],
     tokenizer=tokenizer
     )
 
-print('\n >> Training model ..')
+print('\n\n\n >> Training model ..')
 trainer.train()
 print('Model trained')
 
 
+def compute_metrics(logits_and_labels):
+  logits, labels = logits_and_labels
+  predictions = np.argmax(logits, axis=1)
+  return metric.compute(predictions=predictions, references=labels)
 
 
