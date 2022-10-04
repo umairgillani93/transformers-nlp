@@ -102,3 +102,13 @@ def compute_metrics(logits_and_labels):
   return metric.compute(predictions=predictions, references=labels)
 
 
+save_path = '../../'
+# let's save our trained model
+trainer.save_model(save_path)
+
+# we can also load our saved model in "pipeline" class
+new_model = pipeline("text-classification", model=save_path)
+
+
+
+
