@@ -49,3 +49,4 @@ model_path = os.getenv('HOME') + '/models/AutoModelForSequenceClassification_dis
 
 # download and save the model
 save_model(model_path, AutoModelForSequenceClassification, checkpoint)
+# new line added!
