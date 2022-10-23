@@ -21,7 +21,7 @@ device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
 print('\nDevice: {}'.format(device))
 
 raw_dataset = load_dataset('glue', 'rte')
-print(raw_dataset['train'].features)
+print('\ntrain features: ', raw_dataset['train'].features)
 
 print('\nRaw dataset: {}'.format(raw_dataset))
 
@@ -47,6 +47,15 @@ checkpoint = 'distilbert-base-uncased'
 tokenizer_path = os.getenv('HOME') + '/tokenizers/AutoTokenizer/'
 model_path = os.getenv('HOME') + '/models/AutoModelForSequenceClassification_distilbert_pretrained/'
 
-# download and save the model
-save_model(model_path, AutoModelForSequenceClassification, checkpoint)
-# new line added!
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
+
+print('\nModel & Tokenize loaded')
+
+print('Tokenized sequences: {}'.format(tokenizer(raw_dataset['train']['sentence1'][0],
+                                                 raw_dataset['train']['sentence1'][0])))
+
+pprint('\ntokenized sequences: {}'.format(tokenizer((raw_dataset['train']['sentence1'][0],
+                                                    raw_dataset['train']['sentence2'][0]))))
+
+# line added!
