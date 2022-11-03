@@ -14,7 +14,6 @@ from datasets import load_metric
 import warnings
 warnings.filterwarnings('ignore')
 
-
 print('Imports successful')
 device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
 

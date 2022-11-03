@@ -31,7 +31,6 @@ model_path = os.getenv('HOME') + '/models/AutoModelForSequenceClassification_pre
 # instantiate the tokenizer object
 print('\n >> Loading Tokenizer..')
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-
 #tokenizer.save_pretrained(path)
 #print('\nTokenizer saved at path: {}'.format(path))
 
