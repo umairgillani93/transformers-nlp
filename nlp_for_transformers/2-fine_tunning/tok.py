@@ -4,7 +4,7 @@ from transformers import AutoTokenizer
 
 print('Imports done')
 
-PATH = os.getenv('HOME') + '/models/automodel/tokenizer/'
+PATH = os.getenv('HOME') + '/models/autmodel/tokenizer/'
 
 chkpt = 'bert-base-cased'
 tkz = AutoTokenizer.from_pretrained(chkpt)

@@ -13,8 +13,8 @@ import numpy as np
 import pandas as pd 
 from transformers import pipeline 
 from transformers import DistilBertTokenizer, DistilBertModel
+from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
-from transformers import AutoModel, AutoTokenizer
 from transformers import Trainer
 from transformers import TrainingArguments
 from datasets import load_dataset
@@ -68,14 +68,16 @@ def load_data():
 #extract_data(os.getenv('HOME') + '/datasets/yelp.csv')
 dataset = load_data()
 
-# STEP#2 Tokenizing the dataset
-tkz_path = os.getenv('HOME') + '/models/automodel/tokenizer/'
-model_path = os.getenv('HOME') + '/models/automodel/model/' 
-chkpt = 'bert-base-cased'
-tokenizer = AutoModel.from_pretrained(tkz_path)
-model = AutoModel.from_pretrained(model_path)
+print(f"\n100th row: {dataset['train'][100]}")
 
-print('Model loaded..')
+# STEP#2 Tokenizing the dataset
+tkz_path = os.getenv('HOME') + '/models/autmodel/tokenizer/'
+model_path = os.getenv('HOME') + '/models/autmodel/model/' 
+chkpt = 'bert-base-cased'
+tokenizer = AutoTokenizer.from_pretrained(tkz_path)
+print('toeknizer loaded..\n')
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
+print('model loaded\n')
 
 
 # create a tokenizer function
@@ -105,13 +107,10 @@ def tokenizer_fn(ex):
     return tokenizer(ex['text'], padding='max_length',
             truncation=True)
 
-tkz_train = tokenizer_fn(pd.DataFrame(train))
-tkz_test = tokenizer_fn(pd.DataFrame(test))
+tkz_train = tokenizer_fn(pd.DataFrame(dataset['train']))
+tkz_test = tokenizer_fn(pd.DataFrame(dataset['test']))
 
-print(f'\ntokenized train: {tkz_train}')
 
-print(train.head())
-print(test.head())
 
 # define the model -> sequence classifiatoin BERT pretrained
 model = AutoModel.from_pretraind(model_path, num_labels=5)
