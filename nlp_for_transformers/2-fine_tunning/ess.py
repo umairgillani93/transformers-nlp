@@ -67,7 +67,6 @@ def load_data():
 
 #extract_data(os.getenv('HOME') + '/datasets/yelp.csv')
 dataset = load_data()
-print(f'\ndataset: {dataset}')
 
 # STEP#2 Tokenizing the dataset
 tkz_path = os.getenv('HOME') + '/models/automodel/tokenizer/'
@@ -75,7 +74,6 @@ model_path = os.getenv('HOME') + '/models/automodel/model/'
 chkpt = 'bert-base-cased'
 tokenizer = AutoModel.from_pretrained(tkz_path)
 model = AutoModel.from_pretrained(model_path)
-
 
 print('Model loaded..')
 
@@ -154,5 +152,4 @@ trainer = Trainer(
 # Start fine-tuning the model
 print(' >> Model training..\n')
 trainer.train()
-
 
