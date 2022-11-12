@@ -1,12 +1,12 @@
 import os
 import torch
-from transformers import DistilBertModel, DistilBertTokenizer
+from transformers import AutoModel
 print('IMports  done')
 
-PATH = os.getenv('HOME') + '/models/distilbert/model/'
+PATH = os.getenv('HOME') + '/models/autmodel/model/'
 
-chkpt = 'distilbert-base-uncased'
-model = DistilBertModel.from_pretrained(chkpt)
+chkpt = 'bert-base-cased'
+model = AutoModel.from_pretrained(chkpt)
 print('saving model...')
 
 model.save_pretrained(PATH)

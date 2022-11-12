@@ -6,6 +6,7 @@
 import os
 import sys
 import torch
+#import evaluate
 import torchinfo 
 import pprint
 import numpy as np 
@@ -13,7 +14,7 @@ import pandas as pd
 from transformers import pipeline 
 from transformers import DistilBertTokenizer, DistilBertModel
 from transformers import AutoModelForSequenceClassification
-
+from transformers import AutoModel, AutoTokenizer
 from transformers import Trainer
 from transformers import TrainingArguments
 from datasets import load_dataset
@@ -64,15 +65,20 @@ def load_data():
             )
 
 
-extract_data(os.getenv('HOME') + '/datasets/yelp.csv')
+#extract_data(os.getenv('HOME') + '/datasets/yelp.csv')
 dataset = load_data()
 print(f'\ndataset: {dataset}')
-print(sys.exit('fininshed'))
 
 # STEP#2 Tokenizing the dataset
-tkz_path = os.getenv('HOME') + '/models/distilbert/tokenizer/'
+tkz_path = os.getenv('HOME') + '/models/automodel/tokenizer/'
+model_path = os.getenv('HOME') + '/models/automodel/model/' 
 chkpt = 'bert-base-cased'
-tokenizer = DistilBertTokenizer.from_pretrained(tkz_path)
+tokenizer = AutoModel.from_pretrained(tkz_path)
+model = AutoModel.from_pretrained(model_path)
+
+
+print('Model loaded..')
+
 
 # create a tokenizer function
 def save_model(path, chkpt):
@@ -80,11 +86,11 @@ def save_model(path, chkpt):
     saves the model to the path defined
     '''
     print(f' >> loading tokenizer...')
-    tokenizer = DistilBertTokenizer.from_pretrained(chkpt)
+    tokenizer = AutoTokenizer.from_pretrained(chkpt)
     print(f' >> saving tokenizer...')
     tokenizer.save_pretrained(path)
     print(f' >> loading model ...' )
-    model_ = DistilBertModel.from_pretrained(chkpt)
+    model_ = AutoModel.from_pretrained(chkpt)
     print(f' >> saving model ...')
     model_.save_pretrained(path)
     print(' Alll done')
@@ -105,3 +111,48 @@ tkz_train = tokenizer_fn(pd.DataFrame(train))
 tkz_test = tokenizer_fn(pd.DataFrame(test))
 
 print(f'\ntokenized train: {tkz_train}')
+
+print(train.head())
+print(test.head())
+
+# define the model -> sequence classifiatoin BERT pretrained
+model = AutoModel.from_pretraind(model_path, num_labels=5)
+print('Model loaded..\n')
+
+
+# define evaluation metric
+#metric = evaluate.load('accuracy') # calculates the accuracy of predictions
+
+def compute_metrics(eval_pred):
+    '''
+    computes the accuracy metrics
+    by converting predictions to logits first
+    '''
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions = predictions, references=labels)
+
+
+
+# Setup the evaluation strategy to check the training progress
+# After each epoch
+# training hyperparameters
+training_args = TrainingArguments(
+        output_dir=os.getenv('HOME') + '/checkpoints/automodel/yelp_chkpt/',  # we can change this directly later
+        evaluation_strategy='epoch'
+        )
+
+# Create a Trainer object
+trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tkz_train,
+        eval_dataset=tkz_test,
+        compute_metrics=compute_metrics
+        )
+
+# Start fine-tuning the model
+print(' >> Model training..\n')
+trainer.train()
+
+
