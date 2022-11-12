@@ -47,27 +47,37 @@ def extract_data(path):
     train.to_csv(os.getenv('HOME') + '/datasets/yelp_train.csv')
     test.to_csv(os.getenv('HOME') + '/datasets/yelp_test.csv')
 
+    return train, test
+
     print('All done')
 
 
 
-def load_data():
-    '''
-    loads the data from specified train and test 
-    csv data files
-    '''
-    data_files = {'train': '/home/umairgillani/datasets/yelp_train.csv',
-                  'test': '/home/umairgillani/datasets/yelp_test.csv'
-                  }
-    
-    return load_dataset(
-            'csv', data_files = data_files
-            )
-
+#def load_data():
+#    '''
+#    loads the data from specified train and test 
+#    csv data files
+#    '''
+#    data_files = {'train': '/home/umairgillani/datasets/yelp_train.csv',
+#                  'test': '/home/umairgillani/datasets/yelp_test.csv'
+#                  }
+#    
+#    return load_dataset(
+#            'csv', data_files = data_files
+#            )
+#
 
 #extract_data(os.getenv('HOME') + '/datasets/yelp.csv')
-dataset = load_data()
+def loadData():
+    '''
+    load and returns the data object from 
+    given PATH
+    '''
+    PATH = os.getenv('HOME') + '/datasets/yelp_train.csv'
+    return  load_dataset('csv',
+                     PATH)
 
+dataset = loadData()
 print(f"\n100th row: {dataset['train'][100]}")
 
 # STEP#2 Tokenizing the dataset
@@ -80,6 +90,7 @@ model = AutoModelForSequenceClassification.from_pretrained(model_path)
 print('model loaded\n')
 
 
+
 # create a tokenizer function
 def save_model(path, chkpt):
     '''
@@ -90,7 +101,7 @@ def save_model(path, chkpt):
     print(f' >> saving tokenizer...')
     tokenizer.save_pretrained(path)
     print(f' >> loading model ...' )
-    model_ = AutoModel.from_pretrained(chkpt)
+    model_ = AutoModelForSequenceClassifiatio.from_pretrained(chkpt)
     print(f' >> saving model ...')
     model_.save_pretrained(path)
     print(' Alll done')
@@ -107,15 +118,14 @@ def tokenizer_fn(ex):
     return tokenizer(ex['text'], padding='max_length',
             truncation=True)
 
-tkz_train = tokenizer_fn(pd.DataFrame(dataset['train']))
-tkz_test = tokenizer_fn(pd.DataFrame(dataset['test']))
+tkz_dataset = dataset.map(tokenizer_fn, batched=True)
 
-
+print(f'tokenized_dataset: {tkz_dataset}')
 
 # define the model -> sequence classifiatoin BERT pretrained
-model = AutoModel.from_pretraind(model_path, num_labels=5)
+model =AutoModelForSequenceClassification.from_pretrained(model_path, num_labels=2,
+                                                        ignore_mismatched_sizes=True)
 print('Model loaded..\n')
-
 
 # define evaluation metric
 #metric = evaluate.load('accuracy') # calculates the accuracy of predictions
@@ -143,12 +153,13 @@ training_args = TrainingArguments(
 trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=tkz_train,
-        eval_dataset=tkz_test,
+        train_dataset=tkz_dataset,
+        # eval_dataset=tkz_test,
         compute_metrics=compute_metrics
         )
 
 # Start fine-tuning the model
 print(' >> Model training..\n')
 trainer.train()
+print('model training done')
 
