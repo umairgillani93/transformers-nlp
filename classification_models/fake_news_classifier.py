@@ -66,7 +66,7 @@ class pp():
 #        ids = inputs['input_ids']
 #        attention_mask = inputs['attention_mask']
 #        token_type_ids = inputs['token_type_ids']
-#        
+#        train_xtrain_x
 #        return {
 #                'ids': torch.tensor(ids, dtype=torch.long),
 #                'attention_mask': torch.tensor(attention_mask, dtype=torch.long),
@@ -85,17 +85,13 @@ class DataModel(torch.utils.data.Dataset):
         pass
 
                 
+train_x, val_x = pp.text[: int(len(pp.text) * 0.8)], pp.text[(int(len(pp.text) * 0.8)) + 1:]
+train_y, val_y = pp.label[: int(len(pp.label) * 0.8)], pp.label[(int(len(pp.label) * 0.8)) + 1:]
 
-train_x, val_x, train_y, val_y = train_test_split(
-        pp.text, pp.label, test_size=0.2)
+print(f'\ntrain_encodings: {train_x}')
+print(f'\nval_encodings: {val_x}')
 
+tkz_train = config.TOKENIZER(train_x, truncation=True, padding=True)
+tkz_val = config.TOKENIZER(val_x, truncation=True, padding=True)
 
-print(f'type_train_x: {type(train_x)}')
-print(f'train_x: {train_x}')
-train_encodings = config.TOKENIZER(list(train_x), truncation=True, padding=True)
-val_encodings = config.TOKENIZER(list(val_x), truncation=True, padding=True)
-
-
-print(f'\ntrain_encodings: {train_encoding}')
-print(f'\nval_encodings: {val_encodings}')
-
+print(f'done')
